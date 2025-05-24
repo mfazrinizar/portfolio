@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 
 import { Logo } from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle'; 
 
@@ -80,15 +80,16 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background p-6">
+              <SheetTitle className="sr-only">Main Navigation</SheetTitle>
               <div className="mb-6 flex items-center justify-between">
                  <Link href="#home" onClick={(e) => handleScrollTo(e, '#home')} className="flex items-center" aria-label="mfazrinizar.com homepage">
                     <Logo className="h-7 w-auto" />
                   </Link>
-                <SheetTrigger asChild>
+                {/* <SheetTrigger asChild>
                    <Button variant="ghost" size="icon" aria-label="Close mobile menu">
                     <X className="h-6 w-6" />
                   </Button>
-                </SheetTrigger>
+                </SheetTrigger> */}
               </div>
               <nav className="flex flex-col space-y-3">
                 {navItems.map((item) => (

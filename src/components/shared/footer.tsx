@@ -47,7 +47,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t border-border pt-8 text-center text-sm">
-          <p>&copy; {currentYear} mfazrinizar.com | All rights reserved.</p>
+          <p>&copy;{currentYear} mfazrinizar.com | All rights reserved.</p>
         </div>
       </div>
     </footer>

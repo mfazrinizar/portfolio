@@ -1,11 +1,56 @@
 "use client";
-
+import { useEffect, useRef, useState } from 'react';
+import { phrases } from '@/lib/constants';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Download, Github, Linkedin, Instagram } from 'lucide-react';
 import Image from 'next/image';
 
 export function HeroSection() {
+  const [displayText, setDisplayText] = useState('');
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const typingSpeed = 60;
+  const deletingSpeed = 30;
+  const pauseTime = 2500;
+  const mounted = useRef(true);
+
+  useEffect(() => {
+    mounted.current = true;
+    let timeout: NodeJS.Timeout;
+
+    const handleTyping = () => {
+      const currentPhrase = phrases[phraseIndex];
+      if (!isDeleting) {
+        if (charIndex < currentPhrase.length) {
+          setDisplayText(currentPhrase.slice(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+          timeout = setTimeout(handleTyping, typingSpeed);
+        } else {
+          timeout = setTimeout(() => setIsDeleting(true), pauseTime);
+        }
+      } else {
+        if (charIndex > 0) {
+          setDisplayText(currentPhrase.slice(0, charIndex - 1));
+          setCharIndex(charIndex - 1);
+          timeout = setTimeout(handleTyping, deletingSpeed);
+        } else {
+          setIsDeleting(false);
+          setPhraseIndex((phraseIndex + 1) % phrases.length);
+          timeout = setTimeout(handleTyping, typingSpeed);
+        }
+      }
+    };
+
+    timeout = setTimeout(handleTyping, typingSpeed);
+
+    return () => {
+      mounted.current = false;
+      clearTimeout(timeout);
+    };
+  }, [charIndex, isDeleting, phraseIndex]);
+
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
       e.preventDefault();
@@ -16,6 +61,7 @@ export function HeroSection() {
       }
     }
   };
+
   return (
     <section id="home" className="relative bg-gradient-to-br from-background via-muted/50 to-background py-20 md:py-32 lg:py-40 overflow-hidden">
       <div className="absolute inset-0 opacity-10 dark:opacity-5">
@@ -26,13 +72,13 @@ export function HeroSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="flex justify-center mb-12 md:hidden">
           <div className="relative w-[250px] h-[250px] group">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-10 group-hover:opacity-20 transition-opacity duration-300 rounded-lg transform group-hover:scale-105" />
+            <div className="group absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-10 group-hover:opacity-20 transition-opacity duration-300 rounded-full transform group-hover:scale-105" />
             <Image
               src="/images/logo.png"
               alt="Abstract representation of code or design"
-              width={250}
-              height={250}
-              className="rounded-lg shadow-2xl object-cover relative z-10 transform transition-transform duration-500 animate-pulse-slow group-hover:rotate-1 group-hover:scale-105"
+              width={600}
+              height={600}
+              className="rounded-full shadow-2xl object-cover relative z-10 transform transition-transform duration-500 animate-pulse-slow group-hover:rotate-1 group-hover:scale-105"
               priority
               data-ai-hint="technology design"
             />
@@ -40,7 +86,10 @@ export function HeroSection() {
         </div>
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left">
-            <span className="text-primary font-semibold tracking-wide uppercase">Software Engineer & Research Enthusiast</span>
+            <span className="text-primary font-semibold tracking-wide uppercase min-h-[2.5rem] block">
+              {displayText}
+              <span className="animate-pulse-text">|</span>
+            </span>
             <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
               Standing on the Shoulders<br className="hidden md:block" /> of Giants
             </h1>
@@ -73,13 +122,14 @@ export function HeroSection() {
           </div>
           {/* Logo on the right for md+ */}
           <div className="hidden md:block relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-10 group-hover:opacity-20 transition-opacity duration-300 rounded-lg transform group-hover:scale-105"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-10 group-hover:opacity-20 transition-opacity duration-300 rounded-full transform group-hover:scale-105"></div>
             <Image
               src="/images/logo.png"
               alt="Logo"
               width={600}
               height={600}
-              className="rounded-lg shadow-2xl object-cover relative z-10 transform transition-transform duration-500 animate-pulse-slow group-hover:rotate-1 group-hover:scale-105" priority
+              className="rounded-full shadow-2xl object-cover relative z-10 transform transition-transform duration-500 animate-pulse-slow group-hover:rotate-1 group-hover:scale-105"
+              priority
               data-ai-hint="technology design"
             />
           </div>
@@ -98,6 +148,11 @@ const styles = `
     0%, 100% { opacity: 0.6; transform: scale(1); }
     50% { opacity: 0.3; transform: scale(1.03); }
   }
+  @keyframes pulse-text {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.0; transform: scale(1.02); }
+  }
+  .animate-pulse-text { animation: pulse-text 1.25s infinite ease-in-out; }
   .animate-pulse-slow { animation: pulse-slow 8s infinite ease-in-out; }
   .animate-pulse-slower { animation: pulse-slower 10s infinite ease-in-out; }
 `;

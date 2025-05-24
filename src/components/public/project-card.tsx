@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight } from 'lucide-react';
+import { Button } from '../ui/button';
 
 interface ProjectCardProps {
   project: Project;
@@ -49,9 +50,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
             )}
           </div>
           
-          <div className="mt-auto text-sm font-medium text-primary group-hover:underline flex items-center">
-            View Details <ArrowRight size={16} className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
-          </div>
+          <Button
+            variant="secondary"
+            className="mt-auto text-sm font-medium text-primary flex items-center group-hover:underline transition-all duration-300"
+          >
+            View Details
+            <ArrowRight
+              size={16}
+              className="ml-1 transition-transform duration-300 group-hover:translate-x-1 motion-safe:animate-pulse"
+            />
+          </Button>
         </CardContent>
       </Card>
     </Link>

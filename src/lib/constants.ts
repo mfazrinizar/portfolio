@@ -106,3 +106,10 @@ export const experiences = [
   },
 ];
 
+export const phrases = [
+  "Software Engineer",
+  "Research Enthusiast",
+  "Full Stack Engineer",
+  "Mobile Engineer",
+];
+
