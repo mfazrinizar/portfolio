@@ -84,6 +84,13 @@ export const experiences = [
     icon: "Briefcase"
   },
   {
+    role: "Mobile Developer",
+    company: "Google Play Store & Apple App Store",
+    duration: "2024 - Present",
+    description: "Mobile development, specializing in mobile application development, maintenance, and publishing for commercial client apps.",
+    icon: "Briefcase"
+  },
+  {
     role: "Full Stack Engineer",
     company: "Intelligent Systems Research Group (ISysRG)",
     duration: "2024 - Present",
