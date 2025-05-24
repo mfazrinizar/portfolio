@@ -11,6 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Send } from 'lucide-react';
 import { useState } from 'react';
+import { useEffect } from 'react';
+
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50, { message: "Name must be 50 characters or less." }),
@@ -35,16 +37,57 @@ export function ContactForm() {
     },
   });
 
+  useEffect(() => {
+    if (!document.cookie.includes("csrfToken")) {
+      fetch("/api/csrf")
+        .then(res => res.json())
+        .then(data => {
+          document.cookie = `csrfToken=${data.csrfToken}; path=/; SameSite=Strict`;
+        });
+    }
+  }, []);
+
   async function onSubmit(data: ContactFormValues) {
     setIsSubmitting(true);
-    console.log("Contact form data:", data);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: "Message Sent!",
-      description: "Thanks for reaching out. I'll get back to you soon.",
-    });
-    form.reset(); 
+    try {
+      const csrfToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("csrfToken="))
+        ?.split("=")[1];
+
+      console.log(csrfToken);
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken ?? "",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (res.status === 429) {
+        toast({
+          title: "Chill! Too Many Requests",
+          description: "You have sent too many messages. Please wait a minute before trying again.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      if (!res.ok) throw new Error("Failed to send message");
+      toast({
+        title: "Message Sent!",
+        description: "Thanks for reaching out. I'll get back to you soon.",
+      });
+      form.reset();
+    } catch (error) {
+      toast({
+        title: "Sorry!",
+        description: "There was a problem sending your message. Please try again later.",
+        variant: "destructive",
+      });
+    }
     setIsSubmitting(false);
   }
 
