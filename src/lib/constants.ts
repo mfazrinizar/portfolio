@@ -120,3 +120,9 @@ export const phrases = [
   "Mobile Engineer",
 ];
 
+export const navItems = [
+  { href: '/#home', label: 'Home' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#about', label: 'About' },
+  { href: '/#contact', label: 'Contact' },
+];

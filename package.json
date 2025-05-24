@@ -35,6 +35,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.1.8",
+    "framer-motion": "^12.12.2",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.475.0",
     "next": "^15.3.2",

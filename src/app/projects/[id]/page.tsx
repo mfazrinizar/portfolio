@@ -15,11 +15,17 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { ArrowLeft, ExternalLink, Github, CalendarDays, AppWindow } from 'lucide-react';
 import { Spinner } from '@/components/ui/spinner';
 import { PageHeader } from '@/components/shared/page-header';
+import { motion } from 'framer-motion';
 
 export default function ProjectDetailPage() {
   const params = useParams();
   const router = useRouter();
   const projectId = params.id as string;
+
+  const variant = {
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  };
   
   const [project, setProject] = useState<Project | null | undefined>(undefined); 
 
@@ -43,15 +49,23 @@ export default function ProjectDetailPage() {
   }
 
   if (!project) {
-    return (
+    return ( 
       <div className="flex min-h-screen flex-col">
         <Navbar />
+        <motion.section
+          id="project"
+          variants={variant}
+          initial="hidden"
+          whileInView="visible"
+          className="flex-grow flex items-center justify-center"
+        >
         <main className="flex-grow container mx-auto px-4 py-12 md:px-6 text-center">
           <PageHeader title="Project Not Found" description="The project you are looking for does not exist or could not be loaded." />
           <Button onClick={() => router.push('/projects')} variant="outline" className="mt-8">
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to Projects
           </Button>
         </main>
+        </motion.section>
         <Footer />
       </div>
     );
@@ -60,6 +74,12 @@ export default function ProjectDetailPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
+      <motion.section
+        id="project"
+        variants={variant}
+        initial="hidden"
+        whileInView="visible"
+      >
       <main className="flex-grow py-12 md:py-16">
         <div className="container mx-auto px-4 md:px-6">
           <div className="mb-8">
@@ -180,6 +200,7 @@ export default function ProjectDetailPage() {
           </div>
         </div>
       </main>
+      </motion.section>
       <Footer />
     </div>
   );

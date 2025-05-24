@@ -10,13 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle'; 
-
-const navItems = [
-  { href: '#home', label: 'Home' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#about', label: 'About' },
-  { href: '#contact', label: 'Contact' },
-];
+import { navItems } from '@/lib/constants';
 
 export function Navbar() {
   const pathname = usePathname(); 
@@ -35,17 +29,37 @@ export function Navbar() {
     setIsMobileMenuOpen(false); 
   }, [pathname]);
 
-  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      const targetId = href.substring(1);
+
+  const getNavOffset = () => {
+    const nav = document.querySelector('header');
+    return nav ? nav.clientHeight + 8 : 80; 
+  };
+
+ const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const hash = href.startsWith("/#") ? href.slice(1) : href;
+  const isHome = pathname === "/" || pathname === "/#home";
+  if (hash.startsWith("#") && isHome) {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+
+    setTimeout(() => {
+      const targetId = hash.slice(1);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+        const nav = document.querySelector('header');
+        const offset =
+          window.innerWidth < 768
+            ? (nav ? nav.clientHeight - 8 : 56)
+            : (nav ? nav.clientHeight + 8 : 80);
+        const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: elementPosition - offset,
+          behavior: 'smooth',
+        });
       }
-      setIsMobileMenuOpen(false); 
-    }
-  };
+    }, 300);
+  }
+};
 
   return (
     <header className={cn(
@@ -53,7 +67,7 @@ export function Navbar() {
       isScrolled ? "bg-background/80 backdrop-blur-md shadow-md" : "bg-transparent"
     )}>
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-        <Link href="#home" onClick={(e) => handleScrollTo(e, '#home')} className="flex items-center" aria-label="mfazrinizar.com homepage">
+        <Link href="/#home" onClick={(e) => handleScrollTo(e, '/#home')} className="flex items-center" aria-label="mfazrinizar.com homepage">
           <Logo className="h-8 w-auto" />
         </Link>
         <nav className="hidden items-center space-x-1 md:flex">
@@ -82,14 +96,9 @@ export function Navbar() {
             <SheetContent side="right" className="w-full max-w-xs bg-background p-6">
               <SheetTitle className="sr-only">Main Navigation</SheetTitle>
               <div className="mb-6 flex items-center justify-between">
-                 <Link href="#home" onClick={(e) => handleScrollTo(e, '#home')} className="flex items-center" aria-label="mfazrinizar.com homepage">
+                 <Link href="/#home" onClick={(e) => handleScrollTo(e, '/#home')} className="flex items-center" aria-label="mfazrinizar.com homepage">
                     <Logo className="h-7 w-auto" />
                   </Link>
-                {/* <SheetTrigger asChild>
-                   <Button variant="ghost" size="icon" aria-label="Close mobile menu">
-                    <X className="h-6 w-6" />
-                  </Button>
-                </SheetTrigger> */}
               </div>
               <nav className="flex flex-col space-y-3">
                 {navItems.map((item) => (
