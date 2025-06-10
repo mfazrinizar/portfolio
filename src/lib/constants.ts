@@ -1,4 +1,4 @@
-import type { Project } from "@/types";
+import type { Project, Blog } from "@/types";
 import { Code, Cpu, Lightbulb, Briefcase } from 'lucide-react';
 
 export const projects: Project[] = [
@@ -77,10 +77,10 @@ export const iconMap = {
 
 export const experiences = [
   {
-    role: "Software Engineer",
-    company: "DataAnnotation",
+    role: "AI Software Engineer",
+    company: "Scale AI",
     duration: "2025 - Present",
-    description: "Software optimization, AI engineering and research, specializing in data annotation and model training.",
+    description: "Software using AI evaluation, AI engineering and research, specializing in GenAI model training, feedback, and evaluation.",
     icon: "Briefcase"
   },
   {
@@ -105,6 +105,13 @@ export const experiences = [
     icon: "Briefcase"
   },
   {
+    role: "Software Engineer",
+    company: "DataAnnotation",
+    duration: "Q2 2025",
+    description: "Software optimization, AI engineering and research, specializing in data annotation and model training.",
+    icon: "Briefcase"
+  },
+  {
     role: "Mobile Engineer",
     company: "Confidential State-Owned Enterprise Partner",
     duration: "2023 - 2024",
@@ -125,4 +132,20 @@ export const navItems = [
   { href: '/#projects', label: 'Projects' },
   { href: '/#about', label: 'About' },
   { href: '/#contact', label: 'Contact' },
+];
+
+export const blogs: Blog[] = [
+  // Example blog
+  // {
+  //   id: "1",
+  //   title: "Welcome to My Blog",
+  //   slug: "welcome-to-my-blog",
+  //   content: "This is the first post.",
+  //   summary: "Introductory post.",
+  //   imageUrl: "/images/profile.png",
+  //   tags: ["intro", "personal"],
+  //   publishedAt: new Date(),
+  //   createdAt: new Date(),
+  //   updatedAt: new Date(),
+  // },
 ];

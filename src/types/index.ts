@@ -1,4 +1,3 @@
-
 export type Project = {
   id: string;
   title: string;
@@ -11,6 +10,19 @@ export type Project = {
   detailsUrl?: string;
   tags: string[];
   keywords?: string[];
+  publishedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Blog = {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  summary?: string;
+  imageUrl?: string;
+  tags?: string[];
   publishedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
