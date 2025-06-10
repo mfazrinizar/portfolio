@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
-      <main className="flex-grow">
+      <main className="flex-grow overflow-x-hidden">
         <motion.section
           id="home"
           variants={heroVariants}
