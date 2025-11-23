@@ -5,6 +5,13 @@ import type { NextRequest } from 'next/server';
 // This is a basic middleware function.
 // It currently doesn't perform any specific logic other than letting the request proceed.
 export function middleware(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+
+  if (pathname.startsWith("/assets")) {
+    const target = `https://mfazrinizar.github.io${pathname}${search ?? ""}`;
+    return NextResponse.redirect(target, 307);
+  }
+
   return NextResponse.next();
 }
 
@@ -28,6 +35,6 @@ export const config = {
      * that effectively does nothing for typical app routes.
      */
     // '/((?!api|_next/static|_next/image|favicon.ico).*)', // Example of a broader matcher
-     '/this-path-will-not-match-anything-by-default', // Ensures it doesn't interfere
+     "/assets/:path*", // Ensures it doesn't interfere
   ],
 };
