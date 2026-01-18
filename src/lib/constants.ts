@@ -77,6 +77,13 @@ export const iconMap = {
 
 export const experiences = [
   {
+    role: "Software Engineer Intern",
+    company: "Pertamina",
+    duration: "2024 - 2025",
+    description: "Building specialized software that integrates optimized local Small Language Model onpremise systems for Knowledge-Based Systems (KBS).",
+    icon: "Briefcase"
+  },
+  {
     role: "AI Software Engineer",
     company: "Scale AI",
     duration: "2025 - Present",
@@ -149,3 +156,16 @@ export const blogs: Blog[] = [
   //   updatedAt: new Date(),
   // },
 ];
+
+// Terminal commands for interactive hero terminal
+export const terminalCommands: Record<string, string> = {
+  help: "Available commands: help, about, skills, education, contact, projects, clear",
+  about: "M. Fazri Nizar - Software Engineer & Research Enthusiast with 3+ years of experience building innovative solutions.",
+  skills: "Core skills: Flutter, Dart, Next.JS, TypeScript, Python, PyTorch, Golang, Problem Solving, Research",
+  education: "Computer Science @ Sriwijaya University | GPA: 3.88/4.00 | Expected Graduation: 2026",
+  contact: "Email: mfazrinizar@gmail.com | LinkedIn: linkedin.com/in/mfazrinizar | GitHub: github.com/mfazrinizar",
+  projects: "Featured: TeleOTIVA (AI Healthcare), FazScan (Security Tool), Flutter Secure DotEnv (Encryption Package)",
+  location: "Based in South Sumatera, Indonesia | Open to remote opportunities worldwide",
+  experience: "Current: AI Software Engineer @ Scale AI | Full Stack Engineer @ ISysRG | Research Assistant @ AIRLab",
+  clear: "__CLEAR__",
+};
