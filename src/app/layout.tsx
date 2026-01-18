@@ -1,22 +1,31 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import { ThemeProvider } from 'next-themes';
+import type { Metadata } from "next";
+import { Orbitron, Share_Tech_Mono, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "@/contexts/auth-context";
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const shareTechiMono = Share_Tech_Mono({
+  variable: "--font-share-tech-mono",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: 'mfazrinizar.com - M. Fazri Nizar Portfolio Website',
-  description: 'Personal portfolio website of M. Fazri Nizar.',
+  title: "mfazrinizar.com - M. Fazri Nizar Portfolio Website",
+  description: "Personal portfolio website of M. Fazri Nizar.",
 };
 
 export default function RootLayout({
@@ -26,10 +35,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <body
+        className={`${orbitron.variable} ${shareTechiMono.variable} ${jetbrainsMono.variable} antialiased font-body`}
+      >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* <AuthProvider> */}
           {children}
           <Toaster />
+          {/* </AuthProvider> */}
         </ThemeProvider>
       </body>
     </html>
