@@ -79,7 +79,7 @@ export const experiences = [
   {
     role: "Software Engineer Intern",
     company: "Pertamina",
-    duration: "2024 - 2025",
+    duration: "2025 - Present",
     description: "Building specialized software that integrates optimized local Small Language Model onpremise systems for Knowledge-Based Systems (KBS).",
     icon: "Briefcase"
   },
