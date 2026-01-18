@@ -1,94 +1,218 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Mail, Linkedin, MapPin, Award, Briefcase, ArrowRight } from 'lucide-react';
-import { skills, experiences, iconMap } from '@/lib/constants';
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Mail,
+  Linkedin,
+  MapPin,
+  Award,
+  Briefcase,
+  ArrowRight,
+  User,
+} from "lucide-react";
+import { skills, experiences, iconMap } from "@/lib/constants";
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-16 md:py-24 bg-muted/30">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            About Me
+    <section
+      id="about"
+      className="py-16 md:py-32 bg-background relative overflow-hidden"
+    >
+      {/* Background gradient */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-accent-tertiary/20 rounded-full filter blur-3xl animate-pulse-slow"></div>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
+        {/* Section header */}
+        <div className="mb-10 sm:mb-16 space-y-4">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <User className="w-5 h-5 sm:w-6 sm:h-6 text-accent-tertiary" />
+            <span className="text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">
+              [About_Me]
+            </span>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-wider sm:tracking-widest leading-tight">
+            <span className="neon-text-tertiary">Who I Am</span>
+            <br />
+            <span className="text-foreground">In The Sprawl</span>
           </h2>
-          <p className="mt-3 text-lg text-muted-foreground md:text-xl">
-            Get to know the person behind the engineering.
-          </p>
         </div>
-        <div className="grid gap-12 md:grid-cols-3">
+
+        <div className="grid gap-8 md:gap-16 md:grid-cols-3">
+          {/* Profile card */}
           <div className="md:col-span-1">
-            <Card className="overflow-hidden shadow-xl">
-              <CardContent className="p-0">
-                <Image
-                  src="/images/profile.png"
-                  alt="M. Fazri Nizar - Profile Picture"
-                  width={400}
-                  height={600}
-                  className="w-full object-cover"
-                  data-ai-hint="professional portrait"
-                />
-              </CardContent>
-            </Card>
-            <div className="mt-6 space-y-3 text-sm text-muted-foreground">
-              <p className="flex items-center"><MapPin size={16} className="mr-2 text-primary" /> Based in South Sumatera, Indonesia</p>
-              <p className="flex items-center"><Mail size={16} className="mr-2 text-primary" /> <a href="mailto:mfazrinizar@gmail.com" className="hover:text-primary">mfazrinizar@gmail.com</a></p>
-              <p className="flex items-center"><Linkedin size={16} className="mr-2 text-primary" /> <a href="#" className="hover:text-primary">https://linkedin.com/in/mfazrinizar</a></p>
+            {/* Profile image */}
+            <div className="mb-4 sm:mb-6 cyber-chamfer overflow-hidden border-2 border-accent-tertiary shadow-neon-tertiary relative group max-w-[280px] sm:max-w-none mx-auto md:mx-0">
+              <Image
+                src="/images/profile.png"
+                alt="M. Fazri Nizar - Profile Picture"
+                width={400}
+                height={600}
+                className="w-full object-cover group-hover:scale-110 transition-transform duration-300"
+                data-ai-hint="professional portrait"
+              />
+              {/* Scan effect overlay */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                style={{
+                  background:
+                    "repeating-linear-gradient(0deg, rgba(0, 212, 255, 0.1) 0px, rgba(0, 212, 255, 0.1) 2px, transparent 2px, transparent 4px)",
+                }}
+              />
             </div>
-            <Button className="mt-6 w-full" size="lg" asChild>
-              <Link href="https://www.linkedin.com/in/mfazrinizar/details/projects/" target="_blank">
-                 View My Complete Projects <ArrowRight size={18} className="mr-2" /> 
+
+            {/* Contact info */}
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6 font-mono text-xs sm:text-sm">
+              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent-tertiary hover:shadow-neon-tertiary transition-all duration-200">
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-accent-tertiary flex-shrink-0" />
+                <span className="text-foreground text-xs sm:text-sm">
+                  South Sumatera, Indonesia
+                </span>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent hover:shadow-neon transition-all duration-200">
+                <Mail className="w-3 h-3 sm:w-4 sm:h-4 text-accent flex-shrink-0" />
+                <a
+                  href="mailto:mfazrinizar@gmail.com"
+                  className="text-accent hover:underline text-xs sm:text-sm truncate"
+                >
+                  mfazrinizar@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent-secondary hover:shadow-neon-secondary transition-all duration-200">
+                <Linkedin className="w-3 h-3 sm:w-4 sm:h-4 text-accent-secondary flex-shrink-0" />
+                <a
+                  href="https://linkedin.com/in/mfazrinizar"
+                  className="text-accent-secondary hover:underline truncate text-xs sm:text-sm"
+                >
+                  linkedin.com/in/mfazrinizar
+                </a>
+              </div>
+            </div>
+
+            <Button
+              className="w-full bg-accent-tertiary text-background hover:bg-accent-tertiary/90 shadow-neon-tertiary uppercase font-bold tracking-wider h-12 cyber-chamfer-sm"
+              asChild
+            >
+              <Link
+                href="https://github.com/mfazrinizar?tab=repositories"
+                target="_blank"
+              >
+                View My Complete Projects{" "}
+                <ArrowRight size={16} className="ml-2" />
               </Link>
             </Button>
           </div>
-          <div className="md:col-span-2 space-y-10">
-            <section>
-              <h3 className="mb-4 text-3xl font-semibold text-foreground">
-                Hello, I&apos;m <span className="text-primary">M. Fazri Nizar</span>
+
+          {/* About content */}
+          <div className="md:col-span-2 space-y-12">
+            {/* Introduction */}
+            <div className="space-y-6">
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight">
+                <span className="neon-text">M. Fazri Nizar</span>
+                <br />
+                <span className="text-muted-foreground">
+                  Software Engineer & Research Enthusiast
+                </span>
               </h3>
-              <div className="prose prose-lg max-w-none dark:prose-invert text-foreground/90 space-y-4">
+              <div className="space-y-4 font-mono text-base leading-relaxed text-foreground/90">
                 <p>
-                  I am a dedicated and results-oriented <span className="font-semibold text-primary">Software Engineer</span> with <span className="font-semibold">3+ years</span> of professional experience and a passionate <span className="font-semibold text-primary">Research Enthusiast</span>. My passion lies in engineering solutions in form of systems that solve real-world problems.
+                  <span className="text-accent">$</span> I am a dedicated and
+                  results-oriented{" "}
+                  <span className="neon-text">Software Engineer</span> with{" "}
+                  <span className="font-bold">3+ years</span> of professional
+                  experience and a passionate{" "}
+                  <span className="neon-text-secondary">
+                    Research Enthusiast
+                  </span>
+                  .
                 </p>
                 <p>
-                  I thrive in collaborative environments and am always eager to learn new technologies and methodologies to enhance my skill set. When I&apos;m not coding, I enjoy exploring new research topics, collaborating on innovative projects, and keeping up with the latest trends in the tech world.
+                  <span className="text-accent">$</span> My passion lies in
+                  engineering solutions in form of systems that solve real-world
+                  problems. I thrive in collaborative environments and am always
+                  eager to learn new technologies.
+                </p>
+                <p>
+                  <span className="text-accent">$</span> When I&apos;m not
+                  coding, I explore new research topics, collaborate on
+                  innovative projects, and keep up with the latest tech trends
+                  in the sprawl.
                 </p>
               </div>
-            </section>
-            <section>
-              <h3 className="mb-6 text-2xl font-semibold text-foreground flex items-center"><Award size={24} className="mr-3 text-primary" />My Skills</h3>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
+            </div>
+
+            {/* Skills section */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wide flex items-center gap-2 sm:gap-3">
+                <Award className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
+                <span>Core Competencies</span>
+              </h3>
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-3">
                 {skills.map((skill) => {
                   const Icon = iconMap[skill.icon as keyof typeof iconMap];
                   return (
-                    <div key={skill.name} className="flex items-center space-x-3 rounded-md bg-background p-3 shadow">
-                      <span className="text-primary"><Icon size={20} /></span>
-                      <span className="text-sm font-medium text-foreground/90">{skill.name}</span>
+                    <div
+                      key={skill.name}
+                      className="flex items-center gap-2 sm:gap-3 p-2 sm:p-4 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent hover:shadow-neon-sm hover:bg-muted transition-all duration-200 group"
+                    >
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent group-hover:text-accent-secondary transition-colors flex-shrink-0" />
+                      <span className="text-[10px] sm:text-sm font-mono font-semibold text-foreground/80 group-hover:text-foreground leading-tight">
+                        {skill.name}
+                      </span>
                     </div>
                   );
                 })}
               </div>
-            </section>
-            <section>
-              <h3 className="mb-6 text-2xl font-semibold text-foreground flex items-center"><Briefcase size={24} className="mr-3 text-primary" />Experience</h3>
-              <div className="space-y-8 relative border-l-2 border-primary/30 pl-6">
+            </div>
+
+            {/* Experience section */}
+            <div className="space-y-4 sm:space-y-6">
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wide flex items-center gap-2 sm:gap-3">
+                <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-accent-secondary" />
+                <span>Professional Journey</span>
+              </h3>
+              <div className="space-y-4 sm:space-y-6 relative">
+                {/* Timeline connector */}
+                <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 sm:w-1 bg-gradient-to-b from-accent via-accent-secondary to-accent-tertiary hidden md:block" />
+
                 {experiences.map((exp, index) => {
                   const ExpIcon = iconMap[exp.icon as keyof typeof iconMap];
                   return (
-                    <div key={index} className="relative">
-                      <div className="absolute -left-[33px] top-1 h-4 w-4 rounded-full bg-primary ring-4 ring-background flex items-center justify-center">
-                        <ExpIcon size={16} className="text-background" />
+                    <div
+                      key={index}
+                      className="relative pl-10 sm:pl-16 md:pl-12"
+                    >
+                      {/* Timeline dot */}
+                      <div className="absolute left-0 top-1 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-card border-2 border-accent-secondary flex items-center justify-center">
+                        <ExpIcon className="w-3 h-3 sm:w-4 sm:h-4 text-accent-secondary" />
                       </div>
-                      <h4 className="text-xl font-semibold text-foreground">{exp.role}</h4>
-                      <p className="text-md font-medium text-primary">{exp.company}</p>
-                      <p className="text-sm text-muted-foreground mb-2">{exp.duration}</p>
-                      <p className="text-foreground/90">{exp.description}</p>
+
+                      {/* Experience card */}
+                      <div className="p-3 sm:p-4 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent-secondary hover:shadow-neon-secondary hover:bg-muted/70 transition-all duration-200">
+                        <div className="flex flex-col gap-2 mb-2">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-bold text-accent-secondary uppercase tracking-wide text-xs sm:text-sm md:text-base leading-tight">
+                              {exp.role}
+                            </h4>
+                            <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground font-mono">
+                              {exp.company}
+                            </p>
+                          </div>
+                          <span className="text-[10px] sm:text-xs font-mono text-accent bg-accent/20 px-2 sm:px-3 py-1 cyber-chamfer-sm whitespace-nowrap self-start shrink-0">
+                            {exp.duration}
+                          </span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-foreground/80 font-mono leading-relaxed">
+                          {exp.description}
+                        </p>
+                      </div>
                     </div>
                   );
                 })}
               </div>
-            </section>
+            </div>
           </div>
         </div>
       </div>

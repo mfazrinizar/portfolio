@@ -1,24 +1,38 @@
 "use client";
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, Send } from 'lucide-react';
-import { useState } from 'react';
-import { useEffect } from 'react';
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, Send, Terminal } from "lucide-react";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }).max(50, { message: "Name must be 50 characters or less." }),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." })
+    .max(50, { message: "Name must be 50 characters or less." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
-  subject: z.string().min(5, { message: "Subject must be at least 5 characters." }).max(100, { message: "Subject must be 100 characters or less." }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters." }).max(1000, { message: "Message must be 1000 characters or less." }),
+  subject: z
+    .string()
+    .min(5, { message: "Subject must be at least 5 characters." })
+    .max(100, { message: "Subject must be 100 characters or less." }),
+  message: z
+    .string()
+    .min(10, { message: "Message must be at least 10 characters." })
+    .max(1000, { message: "Message must be 1000 characters or less." }),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -40,8 +54,8 @@ export function ContactForm() {
   useEffect(() => {
     if (!document.cookie.includes("csrfToken")) {
       fetch("/api/csrf")
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           document.cookie = `csrfToken=${data.csrfToken}; path=/; SameSite=Strict`;
         });
     }
@@ -68,8 +82,9 @@ export function ContactForm() {
 
       if (res.status === 429) {
         toast({
-          title: "Chill! Too Many Requests",
-          description: "You have sent too many messages. Please wait a minute before trying again.",
+          title: "Connection Throttled",
+          description:
+            "Too many transmissions detected. Please wait before retrying.",
           variant: "destructive",
         });
         setIsSubmitting(false);
@@ -77,14 +92,14 @@ export function ContactForm() {
       }
       if (!res.ok) throw new Error("Failed to send message");
       toast({
-        title: "Message Sent!",
-        description: "Thanks for reaching out. I'll get back to you soon.",
+        title: "Transmission Complete",
+        description: "Message received successfully. Awaiting response...",
       });
       form.reset();
     } catch (error) {
       toast({
-        title: "Sorry!",
-        description: "There was a problem sending your message. Please try again later.",
+        title: "Transmission Failed",
+        description: "Connection error. Please try again later.",
         variant: "destructive",
       });
     }
@@ -92,84 +107,113 @@ export function ContactForm() {
   }
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-2xl">Send me a message</CardTitle>
-        <CardDescription>I&apos;ll do my best to respond as quickly as possible.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Your Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="your.email@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
+        <Terminal className="w-5 h-5 text-accent" />
+        <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+          message_protocol.init()
+        </span>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormField
               control={form.control}
-              name="subject"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject</FormLabel>
+                  <FormLabel className="font-mono text-xs uppercase tracking-widest text-accent">
+                    <span className="text-muted-foreground mr-1">$</span>
+                    user_name
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Regarding your project..." {...field} />
+                    <Input placeholder="Enter your identifier..." {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="font-mono text-xs" />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="message"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel className="font-mono text-xs uppercase tracking-widest text-accent">
+                    <span className="text-muted-foreground mr-1">$</span>
+                    email_addr
+                  </FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Your detailed message..." rows={5} {...field} />
+                    <Input
+                      type="email"
+                      placeholder="your.email@domain.net"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="font-mono text-xs" />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting}>
+          </div>
+          <FormField
+            control={form.control}
+            name="subject"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-mono text-xs uppercase tracking-widest text-accent">
+                  <span className="text-muted-foreground mr-1">$</span>
+                  subject_line
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Message topic..." {...field} />
+                </FormControl>
+                <FormMessage className="font-mono text-xs" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-mono text-xs uppercase tracking-widest text-accent">
+                  <span className="text-muted-foreground mr-1">$</span>
+                  message_body
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Enter your transmission..."
+                    rows={6}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="font-mono text-xs" />
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center justify-between pt-4">
+            <Button
+              type="submit"
+              className="w-full sm:w-auto"
+              size="lg"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sending...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Transmitting...
                 </>
               ) : (
                 <>
-                  <Send className="mr-2 h-4 w-4" />
-                  Send Message
+                  <Send className="mr-2 h-5 w-5" />
+                  Transmit Message
                 </>
               )}
             </Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

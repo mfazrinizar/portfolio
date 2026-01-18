@@ -13,7 +13,10 @@ export function Spinner({ className, ...props }: SVGProps<SVGSVGElement>) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={cn("animate-spin", className)}
+      className={cn(
+        "animate-spin text-accent filter drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]",
+        className,
+      )}
       {...props}
     >
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
