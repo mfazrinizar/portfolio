@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/auth-context";
+import { GSAPProvider } from "@/components/gsap/gsap-provider";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -44,10 +45,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* <AuthProvider> */}
-          {children}
-          <Toaster />
-          {/* </AuthProvider> */}
+          <GSAPProvider>
+            {/* <AuthProvider> */}
+            {children}
+            <Toaster />
+            {/* </AuthProvider> */}
+          </GSAPProvider>
         </ThemeProvider>
       </body>
     </html>

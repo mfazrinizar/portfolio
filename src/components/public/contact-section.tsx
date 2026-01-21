@@ -1,9 +1,102 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { ContactForm } from "@/components/public/contact-form";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function ContactSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const infoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current.children,
+          { opacity: 0, y: 60, scale: 0.95 },
+          {
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.7,
+            stagger: 0.12,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Form card animation with neon glow
+      if (formRef.current) {
+        gsap.fromTo(
+          formRef.current,
+          {
+            opacity: 0,
+            x: -60,
+            scale: 0.95,
+            boxShadow: "0 0 0px #00ff88",
+          },
+          {
+            scrollTrigger: {
+              trigger: formRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            boxShadow: "0 0 30px rgba(0, 255, 136, 0.3)",
+            duration: 0.8,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Info cards stagger animation
+      if (infoRef.current) {
+        const infoItems = infoRef.current.querySelectorAll(
+          "[data-contact-info]",
+        );
+        gsap.fromTo(
+          infoItems,
+          { opacity: 0, x: 60, scale: 0.9 },
+          {
+            scrollTrigger: {
+              trigger: infoRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: "back.out(1.4)",
+          },
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="contact"
       className="py-16 md:py-32 bg-background relative overflow-hidden grid-pattern"
     >
@@ -15,7 +108,7 @@ export default function ContactSection() {
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
         {/* Section header */}
-        <div className="mb-10 sm:mb-16 space-y-4 text-center">
+        <div ref={headerRef} className="mb-10 sm:mb-16 space-y-4 text-center">
           <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <Send className="w-5 h-5 sm:w-6 sm:h-6 text-accent-secondary" />
             <span className="text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">
@@ -38,21 +131,24 @@ export default function ContactSection() {
 
         <div className="grid gap-12 md:gap-16 md:grid-cols-3">
           {/* Contact Form */}
-          <div className="md:col-span-2">
+          <div ref={formRef} className="md:col-span-2">
             <div className="border-2 border-accent cyber-chamfer p-6 md:p-8 shadow-neon-lg bg-card/50 backdrop-blur-sm">
               <ContactForm />
             </div>
           </div>
 
           {/* Contact Information */}
-          <div className="space-y-6">
+          <div ref={infoRef} className="space-y-6">
             <h3 className="text-2xl font-black uppercase tracking-wide text-accent">
               Quick Contact
             </h3>
 
             <div className="space-y-4">
               {/* Email */}
-              <div className="p-4 bg-muted/50 border-2 border-border cyber-chamfer-sm hover:border-accent hover:shadow-neon-sm transition-all duration-200 group">
+              <div
+                data-contact-info
+                className="p-4 bg-muted/50 border-2 border-border cyber-chamfer-sm hover:border-accent hover:shadow-neon-sm transition-all duration-200 group"
+              >
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-accent flex-shrink-0 mt-1 group-hover:animate-blink" />
                   <div className="flex-1">
@@ -70,7 +166,10 @@ export default function ContactSection() {
               </div>
 
               {/* Location */}
-              <div className="p-4 bg-muted/50 border-2 border-border cyber-chamfer-sm hover:border-accent-tertiary hover:shadow-neon-tertiary transition-all duration-200 group">
+              <div
+                data-contact-info
+                className="p-4 bg-muted/50 border-2 border-border cyber-chamfer-sm hover:border-accent-tertiary hover:shadow-neon-tertiary transition-all duration-200 group"
+              >
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-accent-tertiary flex-shrink-0 mt-1" />
                   <div>
@@ -88,7 +187,10 @@ export default function ContactSection() {
               </div>
 
               {/* Availability */}
-              <div className="p-4 bg-muted/50 border-2 border-accent/50 cyber-chamfer-sm">
+              <div
+                data-contact-info
+                className="p-4 bg-muted/50 border-2 border-accent/50 cyber-chamfer-sm"
+              >
                 <div className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-accent animate-pulse flex-shrink-0 mt-1" />
                   <div>
@@ -104,7 +206,10 @@ export default function ContactSection() {
             </div>
 
             {/* Response time */}
-            <div className="p-4 bg-accent/10 border border-accent/30 cyber-chamfer-sm">
+            <div
+              data-contact-info
+              className="p-4 bg-accent/10 border border-accent/30 cyber-chamfer-sm"
+            >
               <p className="font-mono text-xs text-accent uppercase tracking-widest">
                 <span className="animate-blink">●</span> Expected response time:
                 24-48 hours

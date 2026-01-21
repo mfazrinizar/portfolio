@@ -1,10 +1,109 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { ProjectCard } from "@/components/public/project-card";
 import { projects } from "@/lib/constants";
 import { Code2 } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function ProjectsSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation with glitch effect
+      if (headerRef.current) {
+        const headerElements = headerRef.current.children;
+
+        gsap.fromTo(
+          headerElements,
+          { opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" },
+          {
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            y: 0,
+            clipPath: "inset(0% 0 0 0)",
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Project cards stagger animation
+      if (gridRef.current) {
+        const cards = gridRef.current.querySelectorAll("[data-project-card]");
+
+        gsap.fromTo(
+          cards,
+          {
+            opacity: 0,
+            y: 80,
+            scale: 0.9,
+            rotateX: 15,
+          },
+          {
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            rotateX: 0,
+            duration: 0.7,
+            stagger: {
+              each: 0.15,
+              from: "start",
+            },
+            ease: "power3.out",
+          },
+        );
+
+        // Add hover animations to cards
+        cards.forEach((card) => {
+          const cardElement = card as HTMLElement;
+
+          cardElement.addEventListener("mouseenter", () => {
+            gsap.to(cardElement, {
+              scale: 1.02,
+              y: -8,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+
+          cardElement.addEventListener("mouseleave", () => {
+            gsap.to(cardElement, {
+              scale: 1,
+              y: 0,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          });
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="projects"
       className="py-16 md:py-32 bg-background relative grid-pattern overflow-hidden"
     >
@@ -15,7 +114,7 @@ export default function ProjectsSection() {
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
         {/* Section header */}
-        <div className="mb-10 sm:mb-16 space-y-4">
+        <div ref={headerRef} className="mb-10 sm:mb-16 space-y-4">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-accent-secondary" />
             <span className="text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">
@@ -38,7 +137,10 @@ export default function ProjectsSection() {
 
         {/* Projects grid */}
         {projects.length > 0 ? (
-          <div className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative">
+          <div
+            ref={gridRef}
+            className="grid gap-6 md:gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 relative"
+          >
             {/* Connecting lines (decorative) */}
             <div className="absolute inset-0 pointer-events-none hidden lg:block">
               <svg className="w-full h-full" style={{ position: "absolute" }}>
@@ -69,7 +171,11 @@ export default function ProjectsSection() {
 
             {/* Project cards */}
             {projects.map((project, idx) => (
-              <div key={project.id} className="relative mt-8 md:mt-0">
+              <div
+                key={project.id}
+                className="relative mt-8 md:mt-0"
+                data-project-card
+              >
                 {/* Index badge - adjusted for mobile */}
                 <div className="absolute -top-4 left-4 md:-top-6 md:-left-6 w-10 h-10 md:w-12 md:h-12 cyber-chamfer bg-muted border-2 border-accent flex items-center justify-center text-accent font-mono font-bold text-base md:text-lg z-20">
                   {String(idx + 1).padStart(2, "0")}

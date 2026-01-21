@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,10 +14,142 @@ import {
   User,
 } from "lucide-react";
 import { skills, experiences, iconMap } from "@/lib/constants";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
+  const skillsRef = useRef<HTMLDivElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      if (headerRef.current) {
+        gsap.fromTo(
+          headerRef.current.children,
+          { opacity: 0, y: 50, clipPath: "inset(100% 0 0 0)" },
+          {
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            y: 0,
+            clipPath: "inset(0% 0 0 0)",
+            duration: 0.7,
+            stagger: 0.1,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Profile card animation with scan effect
+      if (profileRef.current) {
+        gsap.fromTo(
+          profileRef.current,
+          { opacity: 0, x: -60, scale: 0.95 },
+          {
+            scrollTrigger: {
+              trigger: profileRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            x: 0,
+            scale: 1,
+            duration: 0.8,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Intro text animation
+      if (introRef.current) {
+        const paragraphs = introRef.current.querySelectorAll("p");
+        gsap.fromTo(
+          paragraphs,
+          { opacity: 0, y: 30, x: 20 },
+          {
+            scrollTrigger: {
+              trigger: introRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            y: 0,
+            x: 0,
+            duration: 0.6,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+        );
+      }
+
+      // Skills grid animation
+      if (skillsRef.current) {
+        const skillItems = skillsRef.current.querySelectorAll("[data-skill]");
+        gsap.fromTo(
+          skillItems,
+          { opacity: 0, scale: 0.8, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: skillsRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: {
+              each: 0.05,
+              from: "random",
+            },
+            ease: "back.out(1.7)",
+          },
+        );
+      }
+
+      // Experience timeline animation
+      if (experienceRef.current) {
+        const expItems =
+          experienceRef.current.querySelectorAll("[data-experience]");
+        gsap.fromTo(
+          expItems,
+          { opacity: 0, x: -40, y: 20 },
+          {
+            scrollTrigger: {
+              trigger: experienceRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+            opacity: 1,
+            x: 0,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.2,
+            ease: "power3.out",
+          },
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="about"
       className="py-16 md:py-32 bg-background relative overflow-hidden"
     >
@@ -25,7 +160,7 @@ export default function AboutSection() {
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
         {/* Section header */}
-        <div className="mb-10 sm:mb-16 space-y-4">
+        <div ref={headerRef} className="mb-10 sm:mb-16 space-y-4">
           <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <User className="w-5 h-5 sm:w-6 sm:h-6 text-accent-tertiary" />
             <span className="text-[10px] sm:text-xs font-mono text-muted-foreground uppercase tracking-widest">
@@ -42,7 +177,7 @@ export default function AboutSection() {
 
         <div className="grid gap-8 md:gap-16 md:grid-cols-3">
           {/* Profile card */}
-          <div className="md:col-span-1">
+          <div ref={profileRef} className="md:col-span-1">
             {/* Profile image */}
             <div className="mb-4 sm:mb-6 cyber-chamfer overflow-hidden border-2 border-accent-tertiary shadow-neon-tertiary relative group max-w-[280px] sm:max-w-none mx-auto md:mx-0">
               <Image
@@ -108,7 +243,7 @@ export default function AboutSection() {
           {/* About content */}
           <div className="md:col-span-2 space-y-12">
             {/* Introduction */}
-            <div className="space-y-6">
+            <div ref={introRef} className="space-y-6">
               <h3 className="text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight">
                 <span className="neon-text">M. Fazri Nizar</span>
                 <br />
@@ -144,7 +279,7 @@ export default function AboutSection() {
             </div>
 
             {/* Skills section */}
-            <div className="space-y-4 sm:space-y-6">
+            <div ref={skillsRef} className="space-y-4 sm:space-y-6">
               <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wide flex items-center gap-2 sm:gap-3">
                 <Award className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
                 <span>Core Competencies</span>
@@ -155,6 +290,7 @@ export default function AboutSection() {
                   return (
                     <div
                       key={skill.name}
+                      data-skill
                       className="flex items-center gap-2 sm:gap-3 p-2 sm:p-4 bg-muted/50 border border-border cyber-chamfer-sm hover:border-accent hover:shadow-neon-sm hover:bg-muted transition-all duration-200 group"
                     >
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent group-hover:text-accent-secondary transition-colors flex-shrink-0" />
@@ -168,7 +304,7 @@ export default function AboutSection() {
             </div>
 
             {/* Experience section */}
-            <div className="space-y-4 sm:space-y-6">
+            <div ref={experienceRef} className="space-y-4 sm:space-y-6">
               <h3 className="text-xl sm:text-2xl font-black uppercase tracking-wide flex items-center gap-2 sm:gap-3">
                 <Briefcase className="w-5 h-5 sm:w-6 sm:h-6 text-accent-secondary" />
                 <span>Professional Journey</span>
@@ -182,6 +318,7 @@ export default function AboutSection() {
                   return (
                     <div
                       key={index}
+                      data-experience
                       className="relative pl-10 sm:pl-16 md:pl-12"
                     >
                       {/* Timeline dot */}

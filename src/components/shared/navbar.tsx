@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Terminal } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,100 @@ export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const navRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
+  const navItemsRef = useRef<HTMLDivElement>(null);
+
+  // Initial mount animation
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Logo glitch entrance
+      gsap.fromTo(
+        logoRef.current,
+        {
+          opacity: 0,
+          x: -30,
+          filter: "blur(10px)",
+        },
+        {
+          opacity: 1,
+          x: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power3.out",
+          delay: 0.2,
+        },
+      );
+
+      // Nav items staggered entrance
+      const navLinks = navItemsRef.current?.querySelectorAll("a");
+      if (navLinks) {
+        gsap.fromTo(
+          navLinks,
+          {
+            opacity: 0,
+            y: -20,
+            rotateX: -45,
+          },
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "back.out(1.7)",
+            delay: 0.5,
+          },
+        );
+      }
+    }, navRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  // Magnetic hover effect for nav items
+  useEffect(() => {
+    const navLinks = navItemsRef.current?.querySelectorAll("a");
+    if (!navLinks) return;
+
+    const handleMouseEnter = (e: Event) => {
+      const target = e.currentTarget as HTMLElement;
+      gsap.to(target, {
+        scale: 1.05,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+      // Neon glow pulse
+      gsap.to(target, {
+        boxShadow:
+          "0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.2)",
+        duration: 0.3,
+      });
+    };
+
+    const handleMouseLeave = (e: Event) => {
+      const target = e.currentTarget as HTMLElement;
+      gsap.to(target, {
+        scale: 1,
+        boxShadow: "none",
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    };
+
+    navLinks.forEach((link) => {
+      link.addEventListener("mouseenter", handleMouseEnter);
+      link.addEventListener("mouseleave", handleMouseLeave);
+    });
+
+    return () => {
+      navLinks.forEach((link) => {
+        link.removeEventListener("mouseenter", handleMouseEnter);
+        link.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,6 +169,7 @@ export function Navbar() {
 
   return (
     <header
+      ref={navRef}
       className={cn(
         "sticky top-0 z-50 w-full transition-all duration-300 border-b",
         isScrolled
@@ -84,6 +180,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6 max-w-7xl">
         {/* Logo */}
         <Link
+          ref={logoRef}
           href="/#home"
           onClick={(e) => handleScrollTo(e, "/#home")}
           className="flex items-center gap-2 group"
@@ -96,7 +193,10 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center space-x-1 md:flex">
+        <nav
+          ref={navItemsRef}
+          className="hidden items-center space-x-1 md:flex"
+        >
           {navItems.map((item, index) => (
             <Link
               key={item.label}
