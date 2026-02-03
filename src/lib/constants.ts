@@ -162,7 +162,7 @@ export const terminalCommands: Record<string, string> = {
   help: "Available commands: help, about, skills, education, contact, projects, clear",
   about: "M. Fazri Nizar - Software Engineer & Research Enthusiast with 3+ years of experience building innovative solutions.",
   skills: "Core skills: Flutter, Dart, Next.JS, TypeScript, Python, PyTorch, Golang, Problem Solving, Research",
-  education: "Computer Science @ Sriwijaya University | GPA: 3.88/4.00 | Expected Graduation: 2026",
+  education: "Informatics Engineering (Computer Science) @ Sriwijaya University | GPA: 4.00/4.00 | Expected Graduation: 2027",
   contact: "Email: mfazrinizar@gmail.com | LinkedIn: linkedin.com/in/mfazrinizar | GitHub: github.com/mfazrinizar",
   projects: "Featured: TeleOTIVA (AI Healthcare), FazScan (Security Tool), Flutter Secure DotEnv (Encryption Package)",
   location: "Based in South Sumatera, Indonesia | Open to remote opportunities worldwide",
